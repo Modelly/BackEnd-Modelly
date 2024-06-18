@@ -1,13 +1,13 @@
-package modelly.com.ModellyAPI;
+package br.com.modelly.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ModellyApiApplication {
+public class ApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ModellyApiApplication.class, args);
+		SpringApplication.run(ApiApplication.class, args);
 	}
 
 }

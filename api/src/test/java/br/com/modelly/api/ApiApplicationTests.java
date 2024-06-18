@@ -1,10 +1,10 @@
-package modelly.com.ModellyAPI;
+package br.com.modelly.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ModellyApiApplicationTests {
+class ApiApplicationTests {
 
 	@Test
 	void contextLoads() {
