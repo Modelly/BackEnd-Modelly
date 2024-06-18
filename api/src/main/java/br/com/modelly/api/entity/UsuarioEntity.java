@@ -68,7 +68,7 @@ public class UsuarioEntity {
 	private String endereco_usuario;
 	
 	@Column(nullable = false)
-	private String foto_usuario;
+	private String foto_perfil_usuario;
 	
 	// CONSTRUTOR ENTITY RESPONSÁVEL POR FAZER A CONVERSÃO DOS DTO PARA ENTITY
 	public UsuarioEntity(UsuarioDTO usuario) {
@@ -191,12 +191,12 @@ public class UsuarioEntity {
 
 
 	public String getFoto_usuario() {
-		return foto_usuario;
+		return foto_perfil_usuario;
 	}
 
 
-	public void setFoto_usuario(String foto_usuario) {
-		this.foto_usuario = foto_usuario;
+	public void setFoto_usuario(String foto_perfil_usuario) {
+		this.foto_perfil_usuario = foto_perfil_usuario;
 	}
 
 	@Override // ANOTAÇÃO JAVA QUE INDICA QUE O MÉTODO REDEFINE UM MÉTODO DA SUPERCLASSE (CLASSE PAI)

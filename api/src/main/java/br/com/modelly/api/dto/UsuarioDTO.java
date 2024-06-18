@@ -22,7 +22,7 @@ public class UsuarioDTO {
 	private String plano_usuario;
 	private String permissao_usuario;
 	private String endereco_usuario;
-	private String foto_usuario;
+	private String foto_perfil_usuario;
 	
 	// CONSTRUTOR DTO RESPONSÁVEL POR CONVERTER ENTITY PARA DTO
 	public UsuarioDTO(UsuarioEntity usuario) {
@@ -123,10 +123,10 @@ public class UsuarioDTO {
 	}
 
 	public String getFoto_usuario() {
-		return foto_usuario;
+		return foto_perfil_usuario;
 	}
 
-	public void setFoto_usuario(String foto_usuario) {
-		this.foto_usuario = foto_usuario;
+	public void setFoto_usuario(String foto_perfil_usuario) {
+		this.foto_perfil_usuario = foto_perfil_usuario;
 	}
 }
