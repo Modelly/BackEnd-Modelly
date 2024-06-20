@@ -1,180 +1,171 @@
 package br.com.modelly.api.entity;
 
-import java.util.Objects;
-
-import org.springframework.beans.BeanUtils;
+import jakarta.persistence.*;
 
 import br.com.modelly.api.dto.LojaDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_Loja")
+@Table(name = "Tb_Loja")
 public class LojaEntity {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Pk_id_Loja;
-	
-	@Column(nullable = false)
-	private Long Fk_id_Usuario;
-	
-	@Column(nullable = false)
-	private String Nome_Loja;
-	
-	@Column(nullable = false)
-	private String Descricao_Loja;
-	
-	@Column(nullable = false)
-	private String Plano_Loja;
-	
-	@Column(nullable = false)
-	private String Telefone_Loja;
-	
-	@Column(nullable = false)
-	private String Email_Loja;
-	
-	@Column(nullable = true)
-	private String CNPJ_Loja;
-	
-	@Column(nullable = false)
-	private Long Qtd_Colecao;
-	
-	@Column(nullable = false)
-	private Long Qtd_Produtos;
-	
-	@Column(nullable = false)
-	private String Foto_Perfil_Loja;
-	
-	@Column(nullable = false)
-	private String Banner_Loja;
-	
-	// CONSTRUTOR ENTITY RESPONSÁVEL POR FAZER A CONVERSÃO DOS DTO PARA ENTITY
-	public LojaEntity(LojaDTO loja) {
-		BeanUtils.copyProperties(loja, this);
-	}
-	
-	// CONSTRUTOR VAZIO
-	public LojaEntity() {
 
-	}
-	
-	
-	//GETTER and SETTER
-	public Long getPk_id_Loja() {
-		return Pk_id_Loja;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Pk_Id_Loja")
+    private Long pkIdLoja;
 
-	public void setPk_id_Loja(Long pk_id_Loja) {
-		Pk_id_Loja = pk_id_Loja;
-	}
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "Fk_Id_Usuario")
+    private UsuarioEntity usuario;
 
-	public Long getFk_id_Usuario() {
-		return Fk_id_Usuario;
-	}
+    @Column(name = "Nome_Loja", nullable = false)
+    private String nomeLoja;
 
-	public void setFk_id_Usuario(Long fk_id_Usuario) {
-		Fk_id_Usuario = fk_id_Usuario;
-	}
+    @Column(name = "Descricao_Loja", nullable = false)
+    private String descricaoLoja;
 
-	public String getNome_Loja() {
-		return Nome_Loja;
-	}
+    @Column(name = "Plano_Loja", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PlanoLojaEnum planoLoja;
 
-	public void setNome_Loja(String nome_Loja) {
-		Nome_Loja = nome_Loja;
-	}
+    @Column(name = "Telefone_Loja", nullable = false)
+    private String telefoneLoja;
 
-	public String getDescricao_Loja() {
-		return Descricao_Loja;
-	}
+    @Column(name = "Email_Loja", nullable = false)
+    private String emailLoja;
 
-	public void setDescricao_Loja(String descricao_Loja) {
-		Descricao_Loja = descricao_Loja;
-	}
+    @Column(name = "CNPJ", nullable = true)
+    private String cnpj;
 
-	public String getPlano_Loja() {
-		return Plano_Loja;
-	}
+    @Column(name = "Qtd_Colecao", nullable = false)
+    private int qtdColecao;
 
-	public void setPlano_Loja(String plano_Loja) {
-		Plano_Loja = plano_Loja;
-	}
+    @Column(name = "Qtd_Produtos", nullable = false)
+    private int qtdProdutos;
 
-	public String getTelefone_Loja() {
-		return Telefone_Loja;
-	}
+    @Column(name = "Foto_Perfil_Loja", nullable = true)
+    private String fotoPerfilLoja;
 
-	public void setTelefone_Loja(String telefone_Loja) {
-		Telefone_Loja = telefone_Loja;
-	}
+    @Column(name = "Banner_Loja", nullable = true)
+    private String bannerLoja;
 
-	public String getEmail_Loja() {
-		return Email_Loja;
-	}
+    // Enums
+    public enum PlanoLojaEnum {
+        papel, pincel, bordado, escultura
+    }
 
-	public void setEmail_Loja(String email_Loja) {
-		Email_Loja = email_Loja;
-	}
+    // CONSTRUTORES
+    public LojaEntity(LojaDTO lojaDTO) {
+        this.pkIdLoja = lojaDTO.getPk_id_loja();
+        this.usuario = new UsuarioEntity(lojaDTO.getUsuario());
+        this.nomeLoja = lojaDTO.getNome_loja();
+        this.descricaoLoja = lojaDTO.getDescricao_loja();
+        this.planoLoja = PlanoLojaEnum.valueOf(lojaDTO.getPlano_loja());
+        this.telefoneLoja = lojaDTO.getTelefone_loja();
+        this.emailLoja = lojaDTO.getEmail_loja();
+        this.cnpj = lojaDTO.getCnpj_loja();
+        this.qtdColecao = lojaDTO.getQtd_colecao();
+        this.qtdProdutos = lojaDTO.getQtd_produtos();
+        this.fotoPerfilLoja = lojaDTO.getFoto_perfil_loja();
+        this.bannerLoja = lojaDTO.getBanner_loja();
+    }
 
-	public String getCNPJ_Loja() {
-		return CNPJ_Loja;
-	}
+    public LojaEntity() {
+    }
 
-	public void setCNPJ_Loja(String cNPJ_Loja) {
-		CNPJ_Loja = cNPJ_Loja;
-	}
+    // GETTER and SETTER
+    public Long getPkIdLoja() {
+        return pkIdLoja;
+    }
 
-	public Long getQtd_Colecao() {
-		return Qtd_Colecao;
-	}
+    public void setPkIdLoja(Long pkIdLoja) {
+        this.pkIdLoja = pkIdLoja;
+    }
 
-	public void setQtd_Colecao(Long qtd_Colecao) {
-		Qtd_Colecao = qtd_Colecao;
-	}
+    public UsuarioEntity getUsuario() {
+        return usuario;
+    }
 
-	public Long getQtd_Produtos() {
-		return Qtd_Produtos;
-	}
+    public void setUsuario(UsuarioEntity usuario) {
+        this.usuario = usuario;
+    }
 
-	public void setQtd_Produtos(Long qtd_Produtos) {
-		Qtd_Produtos = qtd_Produtos;
-	}
+    public String getNomeLoja() {
+        return nomeLoja;
+    }
 
-	public String getFoto_Perfil_Loja() {
-		return Foto_Perfil_Loja;
-	}
+    public void setNomeLoja(String nomeLoja) {
+        this.nomeLoja = nomeLoja;
+    }
 
-	public void setFoto_Perfil_Loja(String foto_Perfil_Loja) {
-		Foto_Perfil_Loja = foto_Perfil_Loja;
-	}
+    public String getDescricaoLoja() {
+        return descricaoLoja;
+    }
 
-	public String getBanner_Loja() {
-		return Banner_Loja;
-	}
+    public void setDescricaoLoja(String descricaoLoja) {
+        this.descricaoLoja = descricaoLoja;
+    }
 
-	public void setBanner_Loja(String banner_Loja) {
-		Banner_Loja = banner_Loja;
-	}
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(Pk_id_Loja); 
-	}
+    public PlanoLojaEnum getPlanoLoja() {
+        return planoLoja;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LojaEntity other = (LojaEntity) obj;
-		return Objects.equals(Pk_id_Loja, other.Pk_id_Loja);
-	}
+    public void setPlanoLoja(PlanoLojaEnum planoLoja) {
+        this.planoLoja = planoLoja;
+    }
+
+    public String getTelefoneLoja() {
+        return telefoneLoja;
+    }
+
+    public void setTelefoneLoja(String telefoneLoja) {
+        this.telefoneLoja = telefoneLoja;
+    }
+
+    public String getEmailLoja() {
+        return emailLoja;
+    }
+
+    public void setEmailLoja(String emailLoja) {
+        this.emailLoja = emailLoja;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public int getQtdColecao() {
+        return qtdColecao;
+    }
+
+    public void setQtdColecao(int qtdColecao) {
+        this.qtdColecao = qtdColecao;
+    }
+
+    public int getQtdProdutos() {
+        return qtdProdutos;
+    }
+
+    public void setQtdProdutos(int qtdProdutos) {
+        this.qtdProdutos = qtdProdutos;
+    }
+
+    public String getFotoPerfilLoja() {
+        return fotoPerfilLoja;
+    }
+
+    public void setFotoPerfilLoja(String fotoPerfilLoja) {
+        this.fotoPerfilLoja = fotoPerfilLoja;
+    }
+
+    public String getBannerLoja() {
+        return bannerLoja;
+    }
+
+    public void setBannerLoja(String bannerLoja) {
+        this.bannerLoja = bannerLoja;
+    }
 }

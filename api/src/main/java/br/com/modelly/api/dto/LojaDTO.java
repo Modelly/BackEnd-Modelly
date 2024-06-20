@@ -1,129 +1,134 @@
 package br.com.modelly.api.dto;
 
-import org.springframework.beans.BeanUtils;
 
 import br.com.modelly.api.entity.LojaEntity;
 
-
 public class LojaDTO {
 
-	private Long Pk_id_Loja;
-	private Long Fk_id_Usuario;
-	private String Nome_Loja;
-	private String Descricao_Loja;
-	private String Plano_Loja;
-	private String Telefone_Loja;
-	private String Email_Loja;
-	private String CNPJ_Loja;
-	private Long Qtd_Colecao;
-	private Long Qtd_Produtos;
-	private String Foto_Perfil_Loja;
-	private String Banner_Loja;
-	
-	// CONSTRUTOR ENTITY RESPONSÁVEL POR FAZER A CONVERSÃO DOS DTO PARA ENTITY
-	public LojaDTO(LojaEntity loja) {
-		BeanUtils.copyProperties(loja, this);
-	}
-	
-	// CONSTRUTOR VAZIO
-	public LojaDTO() {
+    private Long pk_id_loja;
+    private UsuarioDTO usuario;
+    private String nome_loja;
+    private String descricao_loja;
+    private String plano_loja;
+    private String telefone_loja;
+    private String email_loja;
+    private String cnpj_loja;
+    private Integer qtd_colecao;
+    private Integer qtd_produtos;
+    private String foto_perfil_loja;
+    private String banner_loja;
 
-	}
-	
-	//GETTER and SETTER
-	public Long getPk_id_Loja() {
-		return Pk_id_Loja;
-	}
+    public LojaDTO(LojaEntity lojaEntity) {
+        this.pk_id_loja = lojaEntity.getPkIdLoja();
+        this.usuario = new UsuarioDTO(lojaEntity.getUsuario());
+        this.nome_loja = lojaEntity.getNomeLoja();
+        this.descricao_loja = lojaEntity.getDescricaoLoja();
+        this.plano_loja = lojaEntity.getPlanoLoja().name();
+        this.telefone_loja = lojaEntity.getTelefoneLoja();
+        this.email_loja = lojaEntity.getEmailLoja();
+        this.cnpj_loja = lojaEntity.getCnpj();
+        this.qtd_colecao = lojaEntity.getQtdColecao();
+        this.qtd_produtos = lojaEntity.getQtdProdutos();
+        this.foto_perfil_loja = lojaEntity.getFotoPerfilLoja();
+        this.banner_loja = lojaEntity.getBannerLoja();
+    }
 
-	public void setPk_id_Loja(Long pk_id_Loja) {
-		Pk_id_Loja = pk_id_Loja;
-	}
+    public LojaDTO() {
+    }
 
-	public Long getFk_id_Usuario() {
-		return Fk_id_Usuario;
-	}
+    public Long getPk_id_loja() {
+        return pk_id_loja;
+    }
 
-	public void setFk_id_Usuario(Long fk_id_Usuario) {
-		Fk_id_Usuario = fk_id_Usuario;
-	}
+    public void setPk_id_loja(Long pk_id_loja) {
+        this.pk_id_loja = pk_id_loja;
+    }
 
-	public String getNome_Loja() {
-		return Nome_Loja;
-	}
+    public UsuarioDTO getUsuario() {
+        return usuario;
+    }
 
-	public void setNome_Loja(String nome_Loja) {
-		Nome_Loja = nome_Loja;
-	}
+    public void setUsuario(UsuarioDTO usuario) {
+        this.usuario = usuario;
+    }
 
-	public String getDescricao_Loja() {
-		return Descricao_Loja;
-	}
+    public String getNome_loja() {
+        return nome_loja;
+    }
 
-	public void setDescricao_Loja(String descricao_Loja) {
-		Descricao_Loja = descricao_Loja;
-	}
+    public void setNome_loja(String nome_loja) {
+        this.nome_loja = nome_loja;
+    }
 
-	public String getPlano_Loja() {
-		return Plano_Loja;
-	}
+    public String getDescricao_loja() {
+        return descricao_loja;
+    }
 
-	public void setPlano_Loja(String plano_Loja) {
-		Plano_Loja = plano_Loja;
-	}
+    public void setDescricao_loja(String descricao_loja) {
+        this.descricao_loja = descricao_loja;
+    }
 
-	public String getTelefone_Loja() {
-		return Telefone_Loja;
-	}
+    public String getPlano_loja() {
+        return plano_loja;
+    }
 
-	public void setTelefone_Loja(String telefone_Loja) {
-		Telefone_Loja = telefone_Loja;
-	}
+    public void setPlano_loja(String plano_loja) {
+        this.plano_loja = plano_loja;
+    }
 
-	public String getEmail_Loja() {
-		return Email_Loja;
-	}
+    public String getTelefone_loja() {
+        return telefone_loja;
+    }
 
-	public void setEmail_Loja(String email_Loja) {
-		Email_Loja = email_Loja;
-	}
+    public void setTelefone_loja(String telefone_loja) {
+        this.telefone_loja = telefone_loja;
+    }
 
-	public String getCNPJ_Loja() {
-		return CNPJ_Loja;
-	}
+    public String getEmail_loja() {
+        return email_loja;
+    }
 
-	public void setCNPJ_Loja(String cNPJ_Loja) {
-		CNPJ_Loja = cNPJ_Loja;
-	}
+    public void setEmail_loja(String email_loja) {
+        this.email_loja = email_loja;
+    }
 
-	public Long getQtd_Colecao() {
-		return Qtd_Colecao;
-	}
+    public String getCnpj_loja() {
+        return cnpj_loja;
+    }
 
-	public void setQtd_Colecao(Long qtd_Colecao) {
-		Qtd_Colecao = qtd_Colecao;
-	}
+    public void setCnpj_loja(String cnpj_loja) {
+        this.cnpj_loja = cnpj_loja;
+    }
 
-	public Long getQtd_Produtos() {
-		return Qtd_Produtos;
-	}
+    public Integer getQtd_colecao() {
+        return qtd_colecao;
+    }
 
-	public void setQtd_Produtos(Long qtd_Produtos) {
-		Qtd_Produtos = qtd_Produtos;
-	}
+    public void setQtd_colecao(Integer qtd_colecao) {
+        this.qtd_colecao = qtd_colecao;
+    }
 
-	public String getFoto_Perfil_Loja() {
-		return Foto_Perfil_Loja;
-	}
+    public Integer getQtd_produtos() {
+        return qtd_produtos;
+    }
 
-	public void setFoto_Perfil_Loja(String foto_Perfil_Loja) {
-		Foto_Perfil_Loja = foto_Perfil_Loja;
-	}
+    public void setQtd_produtos(Integer qtd_produtos) {
+        this.qtd_produtos = qtd_produtos;
+    }
 
-	public String getBanner_Loja() {
-		return Banner_Loja;
-	}
+    public String getFoto_perfil_loja() {
+        return foto_perfil_loja;
+    }
 
-	public void setBanner_Loja(String banner_Loja) {
-		Banner_Loja = banner_Loja;
-	}
+    public void setFoto_perfil_loja(String foto_perfil_loja) {
+        this.foto_perfil_loja = foto_perfil_loja;
+    }
+
+    public String getBanner_loja() {
+        return banner_loja;
+    }
+
+    public void setBanner_loja(String banner_loja) {
+        this.banner_loja = banner_loja;
+    }
 }

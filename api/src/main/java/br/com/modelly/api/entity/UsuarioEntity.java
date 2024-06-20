@@ -1,17 +1,20 @@
 package br.com.modelly.api.entity;
 
+import java.lang.reflect.Field;
+import java.sql.Date;
 import java.util.Objects;
-
-import org.springframework.beans.BeanUtils;
 
 import br.com.modelly.api.dto.UsuarioDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 
 /*
 1- MAPEAMENTO DA CLASSE EM JPA
@@ -29,180 +32,204 @@ import jakarta.persistence.Table;
  - CONFIGURAR A AÇÃO DO HIBERNATE (CRIAR, CRIAR E DROPAR, VALIDAR...)
 */
 
-@Entity // MAPENADO A CLASSE COMO ENTIDADE
-@Table(name = "tb_usuario") // DEFININDO COMO DEVE SER O NOME DA ENTIDADE NO BD
+@Entity
+@Table(name = "Tb_Usuario")
 public class UsuarioEntity {
-	
-	@Id // DEFININDO O ATRIBUTO COMO ID
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long pk_id_usuario;
-	
-	@Column(nullable = false) // DEFININDO O ATRIBUTO COMO NOT NULL
-	private String nome_usuario;
-	
-	@Column(nullable = false, unique = true) // DEFININDO O ATRIBUTO COMO NOT NULL E ÚNICO
-	private String cpf_usuario;
-	
-	@Column(nullable = false)
-	private String senha_usuario;
-	
-	@Column(nullable = false)
-	private String email_usuario;
-	
-	@Column(nullable = false)
-	private String genero_usuario;
-	
-	@Column(nullable = false)
-	private String data_nasc_usuario;
-	
-	@Column(nullable = false)
-	private String data_registro_usuario;
-	
-	@Column(nullable = false)
-	private String plano_usuario;
-	
-	@Column(nullable = false)
-	private String permissao_usuario;
-	
-	@Column(nullable = false)
-	private String endereco_usuario;
-	
-	@Column(nullable = false)
-	private String foto_perfil_usuario;
-	
-	// CONSTRUTOR ENTITY RESPONSÁVEL POR FAZER A CONVERSÃO DOS DTO PARA ENTITY
-	public UsuarioEntity(UsuarioDTO usuario) {
-		BeanUtils.copyProperties(usuario, this);
-	}
-	
-	// CONSTRUTOR VAZIO
-	public UsuarioEntity() {
 
-	}
-	
-	public Long getPk_id_usuario() {
-		return pk_id_usuario;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Pk_id_Usuario")
+    private Long pkIdUsuario;
 
+    @Column(name = "Nome_Usuario", nullable = false)
+    private String nomeUsuario;
 
-	public void setPk_id_usuario(Long pk_id_usuario) {
-		this.pk_id_usuario = pk_id_usuario;
-	}
+    @Column(name = "CPF_Usuario", nullable = false, unique = true)
+    private String cpfUsuario;
 
+    @Column(name = "Genero_Usuario", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private GeneroUsuarioEnum generoUsuario;
 
-	public String getNome_usuario() {
-		return nome_usuario;
-	}
+    @Column(name = "Data_Nasc_Usuario", nullable = false)
+    private Date dataNascUsuario;
 
+    @Column(name = "Data_Registro_Usuario", nullable = false)
+    private Date dataRegistroUsuario;
 
-	public void setNome_usuario(String nome_usuario) {
-		this.nome_usuario = nome_usuario;
-	}
+    @Column(name = "Plano_Usuario", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PlanoUsuarioEnum planoUsuario;
 
+    @Column(name = "Permissao_Usuario", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PermissaoUsuarioEnum permissaoUsuario;
 
-	public String getCpf_usuario() {
-		return cpf_usuario;
-	}
+    @Column(name = "Email_Usuario", nullable = false)
+    private String emailUsuario;
 
+    @Column(name = "Endereco_Usuario", nullable = false)
+    private String enderecoUsuario;
 
-	public void setCpf_usuario(String cpf_usuario) {
-		this.cpf_usuario = cpf_usuario;
-	}
+    @Column(name = "Foto_Perfil_Usuario", nullable = true)
+    private String fotoPerfilUsuario;
 
+    @Column(name = "senha_usuario", nullable = false)
+    private String senhaUsuario;
 
-	public String getSenha_usuario() {
-		return senha_usuario;
-	}
+    // Enums
+    public enum GeneroUsuarioEnum {
+        masculino, feminino, outro
+    }
 
+    public enum PlanoUsuarioEnum {
+        admirador, entusiasta, colecionador
+    }
 
-	public void setSenha_usuario(String senha_usuario) {
-		this.senha_usuario = senha_usuario;
-	}
+    public enum PermissaoUsuarioEnum {
+        consumidor, artesao
+    }
 
+    // CONSTRUTORES
+    public UsuarioEntity(UsuarioDTO usuario) {
+        this.nomeUsuario = usuario.getNome_usuario();
+        this.cpfUsuario = usuario.getCpf_usuario();
+        this.generoUsuario = GeneroUsuarioEnum.valueOf(usuario.getGenero_usuario());
+        this.dataNascUsuario = usuario.getData_nasc_usuario();
+        this.dataRegistroUsuario = usuario.getData_registro_usuario();
+        this.planoUsuario = PlanoUsuarioEnum.valueOf(usuario.getPlano_usuario());
+        this.permissaoUsuario = PermissaoUsuarioEnum.valueOf(usuario.getPermissao_usuario());
+        this.emailUsuario = usuario.getEmail_usuario();
+        this.enderecoUsuario = usuario.getEndereco_usuario();
+        this.fotoPerfilUsuario = usuario.getFoto_perfil_usuario();
+        this.senhaUsuario = usuario.getSenha_usuario();
+    }
 
-	public String getEmail_usuario() {
-		return email_usuario;
-	}
+    public UsuarioEntity() {
+    }
+    
+    public void validarCamposNotNull() {
+        Field[] campos = this.getClass().getDeclaredFields();
+        for (Field campo : campos) {
+            if (campo.isAnnotationPresent(Column.class)) {
+                Column coluna = campo.getAnnotation(Column.class);
+                if (!coluna.nullable()) {
+                    try {
+                        campo.setAccessible(true);
+                        Object valorCampo = campo.get(this);
+                        if (valorCampo == null) {
+                            throw new IllegalArgumentException("Campo obrigatório está nulo: " + campo.getName());
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace(); // ou lance uma exceção apropriada
+                    }
+                }
+            }
+        }
+    }
 
+    // GETTER and SETTER
+    public Long getPkIdUsuario() {
+        return pkIdUsuario;
+    }
 
-	public void setEmail_usuario(String email_usuario) {
-		this.email_usuario = email_usuario;
-	}
+    public void setPkIdUsuario(Long pkIdUsuario) {
+        this.pkIdUsuario = pkIdUsuario;
+    }
 
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
 
-	public String getGenero_usuario() {
-		return genero_usuario;
-	}
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
+    }
 
+    public String getCpfUsuario() {
+        return cpfUsuario;
+    }
 
-	public void setGenero_usuario(String genero_usuario) {
-		this.genero_usuario = genero_usuario;
-	}
+    public void setCpfUsuario(String cpfUsuario) {
+        this.cpfUsuario = cpfUsuario;
+    }
 
+    public GeneroUsuarioEnum getGeneroUsuario() {
+        return generoUsuario;
+    }
 
-	public String getData_nasc_usuario() {
-		return data_nasc_usuario;
-	}
+    public void setGeneroUsuario(GeneroUsuarioEnum generoUsuario) {
+        this.generoUsuario = generoUsuario;
+    }
 
+    public Date getDataNascUsuario() {
+        return dataNascUsuario;
+    }
 
-	public void setData_nasc_usuario(String data_nasc_usuario) {
-		this.data_nasc_usuario = data_nasc_usuario;
-	}
+    public void setDataNascUsuario(Date dataNascUsuario) {
+        this.dataNascUsuario = dataNascUsuario;
+    }
 
+    public Date getDataRegistroUsuario() {
+        return dataRegistroUsuario;
+    }
 
-	public String getData_registro_usuario() {
-		return data_registro_usuario;
-	}
+    public void setDataRegistroUsuario(Date dataRegistroUsuario) {
+        this.dataRegistroUsuario = dataRegistroUsuario;
+    }
 
+    public PlanoUsuarioEnum getPlanoUsuario() {
+        return planoUsuario;
+    }
 
-	public void setData_registro_usuario(String data_registro_usuario) {
-		this.data_registro_usuario = data_registro_usuario;
-	}
+    public void setPlanoUsuario(PlanoUsuarioEnum planoUsuario) {
+        this.planoUsuario = planoUsuario;
+    }
 
+    public PermissaoUsuarioEnum getPermissaoUsuario() {
+        return permissaoUsuario;
+    }
 
-	public String getPlano_usuario() {
-		return plano_usuario;
-	}
+    public void setPermissaoUsuario(PermissaoUsuarioEnum permissaoUsuario) {
+        this.permissaoUsuario = permissaoUsuario;
+    }
 
+    public String getEmailUsuario() {
+        return emailUsuario;
+    }
 
-	public void setPlano_usuario(String plano_usuario) {
-		this.plano_usuario = plano_usuario;
-	}
+    public void setEmailUsuario(String emailUsuario) {
+        this.emailUsuario = emailUsuario;
+    }
 
+    public String getEnderecoUsuario() {
+        return enderecoUsuario;
+    }
 
-	public String getPermissao_usuario() {
-		return permissao_usuario;
-	}
+    public void setEnderecoUsuario(String enderecoUsuario) {
+        this.enderecoUsuario = enderecoUsuario;
+    }
 
+    public String getFotoPerfilUsuario() {
+        return fotoPerfilUsuario;
+    }
 
-	public void setPermissao_usuario(String permissao_usuario) {
-		this.permissao_usuario = permissao_usuario;
-	}
+    public void setFotoPerfilUsuario(String fotoPerfilUsuario) {
+        this.fotoPerfilUsuario = fotoPerfilUsuario;
+    }
 
+    public String getSenhaUsuario() {
+        return senhaUsuario;
+    }
 
-	public String getEndereco_usuario() {
-		return endereco_usuario;
-	}
+    public void setSenhaUsuario(String senhaUsuario) {
+        this.senhaUsuario = senhaUsuario;
+    }
 
-
-	public void setEndereco_usuario(String endereco_usuario) {
-		this.endereco_usuario = endereco_usuario;
-	}
-
-
-	public String getFoto_usuario() {
-		return foto_perfil_usuario;
-	}
-
-
-	public void setFoto_usuario(String foto_perfil_usuario) {
-		this.foto_perfil_usuario = foto_perfil_usuario;
-	}
 
 	@Override // ANOTAÇÃO JAVA QUE INDICA QUE O MÉTODO REDEFINE UM MÉTODO DA SUPERCLASSE (CLASSE PAI)
 	public int hashCode() {
 		// ESSE MÉTODO VAI RETORNAR UM CÓDIGO HASH PARA A INSTÂNCIA COM BASE NO ID FORNECIDO (ELA É CHAMADA AUTOMATICAMENTE)
-		return Objects.hash(pk_id_usuario); // "Objects" É UMA CLASSE UTILITÁRIA DO PACOTE 'JAVA.UTIL' QUE CONTÉM VÁRIOS MÉTODOS ÚTEIS
+		return Objects.hash(pkIdUsuario); // "Objects" É UMA CLASSE UTILITÁRIA DO PACOTE 'JAVA.UTIL' QUE CONTÉM VÁRIOS MÉTODOS ÚTEIS
 	}
 
 	@Override
@@ -214,7 +241,7 @@ public class UsuarioEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		UsuarioEntity other = (UsuarioEntity) obj;
-		return Objects.equals(pk_id_usuario, other.pk_id_usuario);
+		return Objects.equals(pkIdUsuario, other.pkIdUsuario);
 	}
 	
 }
