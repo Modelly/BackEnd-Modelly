@@ -48,7 +48,7 @@ public class ProdutoEntity {
 
     // Enums
     public enum CategoriaProdutoEnum {
-        decoracao, acessorios, velas, moda, pets, infantil, sacolas, casas
+        decoracao, acessorios, velas, moda, pets, infantil, sacolas, casas, madeira, feltro, biscuit, papel
     }
 
     public enum StatusProdutoEnum {
@@ -57,6 +57,8 @@ public class ProdutoEntity {
 
     // CONSTRUTORES
     public ProdutoEntity(ProdutoDTO produtoDTO) {
+    	this.pkIdProduto = produtoDTO.getPk_id_produto();
+    	this.loja = new LojaEntity(produtoDTO.getLoja());
         this.nomeProduto = produtoDTO.getNome_produto();
         this.precoProduto = produtoDTO.getPreco_produto();
         this.descricaoProduto = produtoDTO.getDescricao_produto();

@@ -47,11 +47,11 @@ public class UsuarioEntity {
     @Column(name = "CPF_Usuario", nullable = false, unique = true)
     private String cpfUsuario;
 
-    @Column(name = "Genero_Usuario", nullable = false)
+    @Column(name = "Genero_Usuario", nullable = true)
     @Enumerated(EnumType.STRING)
     private GeneroUsuarioEnum generoUsuario;
 
-    @Column(name = "Data_Nasc_Usuario", nullable = false)
+    @Column(name = "Data_Nasc_Usuario", nullable = true)
     private Date dataNascUsuario;
 
     @Column(name = "Data_Registro_Usuario", nullable = false)
@@ -68,7 +68,7 @@ public class UsuarioEntity {
     @Column(name = "Email_Usuario", nullable = false)
     private String emailUsuario;
 
-    @Column(name = "Endereco_Usuario", nullable = false)
+    @Column(name = "Endereco_Usuario", nullable = true)
     private String enderecoUsuario;
 
     @Column(name = "Foto_Perfil_Usuario", nullable = true)

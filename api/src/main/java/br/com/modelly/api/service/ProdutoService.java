@@ -46,25 +46,33 @@ public class ProdutoService {
         if (optionalProdutoEntity.isEmpty()) {
             throw new ResourceNotFoundException("Produto não encontrado com o ID: " + id);
         }
-        
+
         // Obtém o ProdutoEntity existente a partir do Optional
         ProdutoEntity produtoExistente = optionalProdutoEntity.get();
-        
-        // Copia as propriedades do ProdutoDTO atualizado para o ProdutoEntity existente
-        BeanUtils.copyProperties(produtoDTO, produtoExistente, "pk_id_produto", "loja");
-        
+
+        // Atualiza as propriedades do ProdutoEntity com base no ProdutoDTO
+        produtoExistente.setNomeProduto(produtoDTO.getNome_produto());
+        produtoExistente.setPrecoProduto(produtoDTO.getPreco_produto());
+        produtoExistente.setDescricaoProduto(produtoDTO.getDescricao_produto());
+        produtoExistente.setCategoriaProduto(ProdutoEntity.CategoriaProdutoEnum.valueOf(produtoDTO.getCategoria_produto()));
+        produtoExistente.setQtdProduto(produtoDTO.getQtd_produto());
+        produtoExistente.setProntaEntrega(produtoDTO.isPronta_entrega());
+        produtoExistente.setTempoProducao(produtoDTO.getTempo_producao());
+        produtoExistente.setStatusProduto(ProdutoEntity.StatusProdutoEnum.valueOf(produtoDTO.getStatus_produto()));
+        produtoExistente.setFotoProduto(produtoDTO.getFoto_produto());
+
         // Busca a entidade Loja com base no ID fornecido no DTO
         Optional<LojaEntity> optionalLojaEntity = lojaRepository.findById(produtoDTO.getLoja().getPk_id_loja());
         if (optionalLojaEntity.isEmpty()) {
             throw new ResourceNotFoundException("Loja não encontrada com o ID: " + produtoDTO.getLoja().getPk_id_loja());
         }
-        
+
         // Define a entidade Loja no ProdutoEntity
         produtoExistente.setLoja(optionalLojaEntity.get());
-        
+
         // Salva o ProdutoEntity atualizado no banco de dados
         produtoRepository.save(produtoExistente);
-        
+
         // Retorna o ProdutoDTO atualizado
         return new ProdutoDTO(produtoExistente);
     }

@@ -21,7 +21,6 @@ public class ProdutoDTO {
     	this.pk_id_produto = produtoEntity.getPkIdProduto();
     	this.loja = new LojaDTO(produtoEntity.getLoja());
         this.nome_produto = produtoEntity.getNomeProduto();
-        this.nome_produto = produtoEntity.getNomeProduto();
         this.preco_produto = produtoEntity.getPrecoProduto();
         this.descricao_produto = produtoEntity.getDescricaoProduto();
         this.categoria_produto = produtoEntity.getCategoriaProduto().toString();
